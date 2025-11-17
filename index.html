@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MochiBot – Embodied AI Pet Robot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      background: #f5f7fb;
+      color: #222;
+    }
+    header {
+      background: linear-gradient(135deg, #2b4c7e, #4f7cac);
+      color: white;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0 0 0.5rem;
+      font-size: 2.2rem;
+    }
+    header p {
+      margin: 0.25rem 0;
+      font-size: 1rem;
+      opacity: 0.95;
+    }
+    main {
+      max-width: 900px;
+      margin: 1.5rem auto 3rem;
+      padding: 0 1.5rem;
+    }
+    section {
+      background: white;
+      margin-bottom: 1.2rem;
+      padding: 1.2rem 1.4rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    section h2 {
+      margin-top: 0;
+      font-size: 1.25rem;
+      color: #2b4c7e;
+      border-bottom: 1px solid #e0e3ef;
+      padding-bottom: 0.3rem;
+      margin-bottom: 0.7rem;
+    }
+    h3 {
+      margin-top: 0.8rem;
+      margin-bottom: 0.3rem;
+      font-size: 1.05rem;
+      color: #344055;
+    }
+    ul {
+      padding-left: 1.2rem;
+      margin: 0.3rem 0 0.6rem;
+    }
+    code {
+      background: #eef1f8;
+      padding: 0.1rem 0.25rem;
+      border-radius: 3px;
+      font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+      font-size: 0.9em;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #777;
+      padding: 1.5rem 0 2rem;
+    }
+    .pill {
+      display: inline-block;
+      background: #e3e9f7;
+      color: #2b4c7e;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      margin-right: 0.3rem;
+    }
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MochiBot: Embodied AI Pet Robot</h1>
+    <p>Four primitive abilities &middot; Policy-driven control &middot; Human-like interaction</p>
+    <p class="pill">Move</p>
+    <p class="pill">Read</p>
+    <p class="pill">Talk</p>
+    <p class="pill">Listen</p>
+  </header>
+
+  <main>
+    <section id="abstract">
+      <h2>Abstract</h2>
+      <p>
+        MochiBot is an embodied AI system that explores how a robot can exhibit
+        coherent, human-like behavior using only four core abilities:
+        <strong>Move</strong>, <strong>Read</strong>, <strong>Talk</strong>, and
+        <strong>Listen</strong>. Instead of rule-based logic or behavior trees, a
+        policy model selects and parameterizes these abilities directly from
+        observations. By interpreting visual input, reading text in its
+        environment, and engaging in dialogue, MochiBot demonstrates how
+        minimal skills guided by a high-level policy can yield adaptive,
+        context-aware behavior.
+      </p>
+    </section>
+
+    <section id="methods">
+      <h2>Methods & System Design</h2>
+      <h3>Core Idea</h3>
+      <p>
+        Rather than hand-coding behavior, MochiBot uses a small set of
+        parameterized skills and lets a policy model decide which skill to
+        invoke and how to configure it at each step.
+      </p>
+
+      <h3>Primitive Abilities (Skills)</h3>
+      <ul>
+        <li><strong>Move</strong> – locomotion: follow, back away, orbit, or stay still.</li>
+        <li><strong>Read</strong> – attend to a visual region, extract text (OCR), and interpret it.</li>
+        <li><strong>Talk</strong> – generate summaries, explanations, questions, or commentary.</li>
+        <li><strong>Listen</strong> – attend to user speech, commands, or questions.</li>
+      </ul>
+
+      <h3>Policy Model</h3>
+      <p>
+        A language-model-based policy receives a structured observation (vision
+        summary, recent text, internal memory, prior actions) and outputs a
+        JSON description of the next action, e.g.:
+      </p>
+      <pre><code>{
+  "action": "Read",
+  "params": {
+    "region": "book_like_object",
+    "depth": "detail",
+    "purpose": "summarize"
+  }
+}</code></pre>
+
+      <p>
+        This action is then executed by the corresponding skill module, which
+        updates the robot's internal state and closes the loop.
+      </p>
+    </section>
+
+    <section id="loop">
+      <h2>Cognitive Loop</h2>
+      <p>
+        At each time step, MochiBot repeats the following cycle:
+      </p>
+      <ul>
+        <li><strong>Perceive</strong> – capture camera input and any user utterances.</li>
+        <li><strong>Observe</strong> – build a compact textual observation of the scene and state.</li>
+        <li><strong>Decide</strong> – call the policy model to choose a skill and parameters.</li>
+        <li><strong>Execute</strong> – run the selected skill (Move, Read, Talk, or Listen).</li>
+        <li><strong>Update</strong> – write results into internal memory for future context.</li>
+      </ul>
+    </section>
+
+    <section id="results">
+      <h2>Preliminary Results</h2>
+      <ul>
+        <li>Robot brain implemented as a Python controller with a camera-based observation pipeline.</li>
+        <li>Primitive skills for movement, reading, dialogue, and listening are parameterized and callable.</li>
+        <li>The policy model produces structured actions (JSON) from observations instead of using if-else rules.</li>
+        <li>MochiBot can detect text objects, “read” their content, and generate summaries or follow-up questions.</li>
+        <li>Early behavior shows the robot moving closer before reading and then engaging the user in discussion.</li>
+      </ul>
+    </section>
+
+    <section id="conclusion">
+      <h2>Conclusion & Next Steps</h2>
+      <p>
+        MochiBot suggests that a small number of general-purpose abilities,
+        combined with a policy-driven controller, can be enough to produce
+        rich, interactive behavior. Future work includes improving perception,
+        refining the policy for longer-term planning, and porting the brain to
+        a physical mobile robot platform with onboard sensors and actuators.
+      </p>
+    </section>
+
+    <section id="references">
+      <h2>References</h2>
+      <p>
+        Ahn, M., et al. (2022). Do As I Can, Not As I Say: Grounding Language in Robotic Affordances.
+        <em>arXiv:2204.01691</em>.
+        <a href="https://arxiv.org/abs/2204.01691" target="_blank">https://arxiv.org/abs/2204.01691</a>
+      </p>
+      <p>
+        Brohan, A., et al. (2023). RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control.
+        <em>arXiv:2307.15818</em>.
+        <a href="https://arxiv.org/abs/2307.15818" target="_blank">https://arxiv.org/abs/2307.15818</a>
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 MochiBot Project &middot; Kennesaw State University C-Day Submission
+  </footer>
+</body>
+</html>
